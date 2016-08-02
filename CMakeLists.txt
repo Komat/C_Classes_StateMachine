@@ -7,7 +7,6 @@ set(
         SOURCE_FILES
         main.c
         State.c State.h
-        StateMachine.c StateMachine.h
         classes/StateMachine/states/intro_state.c classes/StateMachine/states/intro_state.h
         classes/StateMachine/states/loading_state.c classes/StateMachine/states/loading_state.h
         classes/StateMachine/states/main_state.c classes/StateMachine/states/main_state.h
@@ -17,6 +16,6 @@ set(
         classes/core/ItemList/ItemList.c classes/core/ItemList/ItemList.h
         classes/core/PubSub/PubSub.c classes/core/PubSub/PubSub.h
         states/IntroState.c states/IntroState.h
-)
+        states/MainState.c states/MainState.h)
 
 add_executable(StateMachine ${SOURCE_FILES})

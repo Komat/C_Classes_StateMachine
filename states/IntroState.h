@@ -17,6 +17,6 @@ void onIntroEnter(State *self);
 
 void onIntroExit(State *self);
 
-State *intro_new(void);
+State *intro_state_new(void);
 
 #endif //STATEMACHINE_INTROSTATE_H

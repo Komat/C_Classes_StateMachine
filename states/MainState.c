@@ -1,30 +1,30 @@
 /**
  * @description
- * @fileName IntroState.c.
+ * @fileName MainState.c.
  * @author komatsu
  * @date 8/2/16.
  * @version 0.0
  */
 
-#include "IntroState.h"
+#include "MainState.h"
 
-void onIntroEnter(State *self) {
+void onMainEnter(State *self) {
     pubsub_publish(getStateTopicString(CHANGE_STATE), self->id);
     pubsub_publish(getStateTopicString(ENTER_STATE), self->id);
 }
 
 
-void onIntroExit(State *self) {
+void onMainExit(State *self) {
     pubsub_publish(getStateTopicString(CHANGE_STATE), self->id);
     pubsub_publish(getStateTopicString(EXIT_STATE), self->id);
 }
 
 
-State *intro_state_new(void) {
+State *main_state_new(void) {
     State *self = state_new();
-    self->id = "INTRO",
+    self->id = "MAIN",
     self->isCurrent = TRUE,
-    self->onEnter = onIntroEnter;
-    self->onExit = onIntroExit;
+    self->onEnter = onMainEnter;
+    self->onExit = onMainExit;
     return self;
 }

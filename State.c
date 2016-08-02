@@ -35,6 +35,7 @@ char *get_state_current_bool(State *self) {
     return (self->isCurrent == 1 ? "true" : "false");
 }
 
+
 char *getStateTopicString(STATE_TYPE topic) {
     switch (topic) {
         case CHANGE_STATE:
