@@ -15,6 +15,20 @@
 #include "StateMachine.h"
 
 
+int sleep(unsigned long x) {
+    clock_t c1 = clock(), c2;
+
+    do {
+
+        if ((c2 = clock()) == (clock_t) -1)
+            return 0;
+    } while (1000.0 * (c2 - c1) / CLOCKS_PER_SEC < x);
+
+    return 1;
+
+}
+
+
 /**
  *
  */
@@ -47,19 +61,6 @@ void state_enter_handler(State *state) {
 }
 
 
-int sleep(unsigned long x) {
-    clock_t c1 = clock(), c2;
-
-    do {
-
-        if ((c2 = clock()) == (clock_t) -1)
-            return 0;
-    } while (1000.0 * (c2 - c1) / CLOCKS_PER_SEC < x);
-
-    return 1;
-
-}
-
 
 State *main_state_new(void) {
     State *self = state_new();
@@ -78,11 +79,11 @@ State *intro_state_new(void) {
 
 int main(void) {
 
+    state_machine_init();
 
-    pubsub_new();
-    pubsub_subscribe(STATE_TOPIC_LIST[ENTER_STATE], (Subscriber) state_enter_handler);
-    pubsub_subscribe(STATE_TOPIC_LIST[STAY_STATE], (Subscriber) state_stay_handler);
-    pubsub_subscribe(STATE_TOPIC_LIST[EXIT_STATE], (Subscriber) state_exit_handler);
+    state_machie_subscribe(ENTER_STATE, state_enter_handler);
+    state_machie_subscribe(STAY_STATE, state_stay_handler);
+    state_machie_subscribe(EXIT_STATE, state_exit_handler);
 
     hash *state_machine = state_machine_new();
 
@@ -95,14 +96,20 @@ int main(void) {
     dictionary *state_machine_list = state_machine_ready(state_machine);
 
     state_machine_goto(state_machine, Intro);
-    sleep(5000);
+    sleep(1500);
     state_machine_goto(state_machine, Main);
-    sleep(5000);
+    sleep(1500);
     state_machine_goto(state_machine, Intro);
 
 
+    state_machie_unsubscribe(ENTER_STATE, state_enter_handler);
+    state_machie_unsubscribe(STAY_STATE, state_stay_handler);
+    state_machie_unsubscribe(EXIT_STATE, state_exit_handler);
+
     state_destroy(Intro);
     state_destroy(Main);
+
+    state_machine_destroy(state_machine);
 
     return EXIT_SUCCESS;
 }

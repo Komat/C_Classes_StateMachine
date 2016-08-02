@@ -16,9 +16,14 @@ extern char *STATE_TOPIC_LIST[];
 
 void state_machine_init(void);
 
+
+void state_machie_subscribe(STATE_TYPE param, void (*fun)(State *));
+
+void state_machie_unsubscribe(STATE_TYPE param, void (*fun)(State *));
+
 hash *state_machine_new(void);
 
-void state_machine_destroy(State *self);
+void state_machine_destroy(hash *self);
 
 hash_template *state_machine_add(hash *state_list, State *state);
 

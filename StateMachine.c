@@ -11,6 +11,18 @@
 
 
 void state_machine_init(void) {
+    pubsub_new();
+}
+
+
+void state_machie_subscribe(STATE_TYPE param, void (*fun)(State *)) {
+    pubsub_subscribe(STATE_TOPIC_LIST[param], (Subscriber) fun);
+}
+
+
+
+void state_machie_unsubscribe(STATE_TYPE param, void (*fun)(State *)) {
+    pubsub_unsubscribe(STATE_TOPIC_LIST[param], (Subscriber) fun);
 }
 
 
@@ -19,6 +31,12 @@ hash *state_machine_new(void) {
     return state_list;
 }
 
+
+
+void state_machine_destroy(hash *self) {
+    hash_destroy(self);
+    pubsub_destory();
+}
 
 
 hash_template *state_machine_add(hash *state_list, State *state) {
@@ -38,7 +56,7 @@ dictionary *state_machine_ready(hash *state_machine) {
 static void state_handler(void *state) {
     State *next_state = ((State *) state)->next;
     next_state->onEnter(next_state);
-    pusub_unsubscribe(STATE_TOPIC_LIST[EXIT_STATE], state_handler);
+    pubsub_unsubscribe(STATE_TOPIC_LIST[EXIT_STATE], state_handler);
 }
 
 
@@ -90,13 +108,8 @@ void state_machine_goto(hash *state_machine, State *state) {
             break;
 
         case TRUE:
-            state->onStay(state);
-            break;
-
         default:
             state->onStay(state);
             break;
     }
 }
-
-
