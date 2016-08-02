@@ -62,6 +62,16 @@ void state_enter_handler(State *state) {
 
 
 
+/**
+ * 購読開始
+ */
+void intro_enter_handler(State *state) {
+    printf("[ONCE::%s::ENTER]\n", state->id);
+    state_machie_unsubscribe(ENTER_STATE, intro_enter_handler);
+}
+
+
+
 State *main_state_new(void) {
     State *self = state_new();
     self->id = "MAIN";
@@ -95,12 +105,15 @@ int main(void) {
 
     dictionary *state_machine_list = state_machine_ready(state_machine);
 
+    state_machie_subscribe(ENTER_STATE, intro_enter_handler);
     state_machine_goto(state_machine, Intro);
     sleep(1500);
     state_machine_goto(state_machine, Main);
     sleep(1500);
+    state_machie_subscribe(ENTER_STATE, intro_enter_handler);
     state_machine_goto(state_machine, Intro);
-
+    sleep(1500);
+    state_machine_exit(state_machine, Intro);
 
     state_machie_unsubscribe(ENTER_STATE, state_enter_handler);
     state_machie_unsubscribe(STAY_STATE, state_stay_handler);

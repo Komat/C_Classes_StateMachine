@@ -117,8 +117,32 @@ void state_machine_goto(hash *state_machine, State *state) {
             break;
 
         case TRUE:
-        default:
             state->onStay(state);
             break;
+
+        default:
+            break;
     }
+
+}
+
+void state_machine_exit(hash *state_machine, State *state) {
+    State *current_state;
+
+    switch(state->isCurrent) {
+
+        case FALSE:
+            break;
+
+        case TRUE:
+            current_state = get_current_state(state_machine);
+            if (current_state) {
+                current_state->onExit(current_state);
+            }
+            break;
+
+        default:
+            break;
+    }
+
 }

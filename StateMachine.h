@@ -31,4 +31,6 @@ dictionary *state_machine_ready(hash *state_list);
 
 void state_machine_goto(hash *state_machine, State *state);
 
+void state_machine_exit(hash *state_machine, State *state);
+
 #endif //STATEMACHINE_STATEMACHINE_H
