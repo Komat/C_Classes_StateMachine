@@ -33,9 +33,18 @@ hash *state_machine_new(void) {
 
 
 
-void state_machine_destroy(hash *self) {
-    hash_destroy(self);
+void state_machine_destroy(hash *state_machine, dictionary *state_machine_list) {
+
+    hash_template *state;
+
+    while ((state = dictionary_next(state_machine_list))) {
+        dictionary_remove(state_machine, ((State *) state)->id);
+    }
+
+    dictionary_destroy(state_machine_list);
+    hash_destroy(state_machine);
     pubsub_destory();
+
 }
 
 

@@ -106,10 +106,7 @@ int main(void) {
     state_machie_unsubscribe(STAY_STATE, state_stay_handler);
     state_machie_unsubscribe(EXIT_STATE, state_exit_handler);
 
-    state_destroy(Intro);
-    state_destroy(Main);
-
-    state_machine_destroy(state_machine);
+    state_machine_destroy(state_machine, state_machine_list);
 
     return EXIT_SUCCESS;
 }

@@ -23,7 +23,7 @@ void state_machie_unsubscribe(STATE_TYPE param, void (*fun)(State *));
 
 hash *state_machine_new(void);
 
-void state_machine_destroy(hash *self);
+void state_machine_destroy(hash *state_machine, dictionary *state_machine_list);
 
 hash_template *state_machine_add(hash *state_list, State *state);
 
