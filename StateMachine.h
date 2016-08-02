@@ -1,32 +1,29 @@
 /**
- * @fileName statemachine.h
- * @author
- * @version
- * @copyright
  * @description
+ * @fileName StateMachine.h
+ * @author 小松
+ * @date 8/3/16
+ * @version 0.0.0
  */
 
 #ifndef STATEMACHINE_STATEMACHINE_H
 #define STATEMACHINE_STATEMACHINE_H
 
-#include <stdio.h>
 
 #include "State.h"
 
-#include "classes/StateMachine/states/loading_state.h"
-#include "classes/StateMachine/states/intro_state.h"
-#include "classes/StateMachine/states/main_state.h"
+extern char *STATE_TOPIC_LIST[];
 
-/**
- *
- * @param state
- */
-void changeState(int state);
+void state_machine_init(void);
 
-/**
- *
- */
-void initializeState(void);
+hash *state_machine_new(void);
 
+void state_machine_destroy(State *self);
+
+hash_template *state_machine_add(hash *state_list, State *state);
+
+dictionary *state_machine_ready(hash *state_list);
+
+void state_machine_goto(hash *state_machine, State *state);
 
 #endif //STATEMACHINE_STATEMACHINE_H

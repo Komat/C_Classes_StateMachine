@@ -11,20 +11,20 @@
 
 
 #include <stdlib.h>
+#include "classes/core/PubSub/PubSub.h"
 
 #define TRUE 1
 #define FALSE 0
 
 
 typedef enum {
+    STAY_STATE,
     CHANGE_STATE,
     ENTER_STATE,
     EXIT_STATE,
     STATE_LEN
 } STATE_TYPE;
 
-
-char *getStateTopicString(STATE_TYPE topic);
 
 
 typedef struct state_tmp {
@@ -34,6 +34,8 @@ typedef struct state_tmp {
     struct state_tmp *prev;
 
     void (*onEnter)(struct state_tmp *self);
+
+    void (*onStay)(struct state_tmp *self);
 
     void (*onExit)(struct state_tmp *self);
 

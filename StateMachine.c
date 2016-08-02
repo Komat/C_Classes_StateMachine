@@ -1,250 +1,102 @@
 /**
- * @fileName statemachine.c
- * @author
- * @version
- * @copyright
  * @description
+ * @fileName StateMachine.h
+ * @author 小松
+ * @date 8/3/16
+ * @version 0.0.0
  */
 
 #include "StateMachine.h"
 
 
-/**
- *
- */
-typedef enum {
-    STATE_LOADING,
-    STATE_INTRO,
-    STATE_MAIN,
-    STATE_MAX
-} state_list;
 
-
-/**
- *
- */
-typedef enum {
-    change_state,
-    stay_state,
-    enter_state,
-    exit_state,
-    time_out
-} event_types;
-
-
-
-/**
- *
- * @param id
- * @param event
- */
-void stateHandler(event_types event);
-
-
-void onLoadingEnterHandler(void);
-
-void onIntroEnterHandler(void);
-
-void onMainEnterHandler(void);
-
-
-/**
- *
- */
-typedef struct StateMachine {
-
-    void (*print_id)(void);
-
-    int isCurrent;
-
-    state_list State;
-
-    void (*stateHandler)(event_types event);
-
-    void (*onEnter)(void);
-
-    void (*onExit)(void);
-
-} stateMachine;
-
-
-/**
- * state list
- */
-stateMachine stateMachineList[] = {
-        {
-                loading_print_id,
-                FALSE,
-                STATE_LOADING,
-                stateHandler,
-                onLoadingEnterHandler,
-                loading_onExit
-        },
-        {
-                intro_print_id,
-                FALSE,
-                STATE_INTRO,
-                stateHandler,
-                onIntroEnterHandler,
-                intro_onExit
-        },
-        {
-                main_print_id,
-                FALSE,
-                STATE_MAIN,
-                stateHandler,
-                onMainEnterHandler,
-                main_onExit
-        },
-};
-
-
-/**
- * 現在の state
- */
-stateMachine *currentState = &stateMachineList[STATE_LOADING];
-
-
-/**
- * 現在の state 取得
- * @return
- */
-stateMachine *getState(void) {
-    return currentState;
+void state_machine_init(void) {
 }
 
 
-/**
- *
- * @param state
- */
-void setState(state_list state) {
-    if (state >= STATE_MAX) {
-        state = STATE_INTRO;
-    }
-
-    currentState = &stateMachineList[state];
+hash *state_machine_new(void) {
+    hash *state_list = hash_new();
+    return state_list;
 }
 
 
-/**
- *
- */
-void enterState() {
-    getState()->isCurrent = TRUE;
 
-//    getState()->stateHandler(change_state);
-    getState()->stateHandler(enter_state);
-    getState()->onEnter();
+hash_template *state_machine_add(hash *state_list, State *state) {
+    hash_template *state_machine = dictionary_set(state_list, state->id, state);
+    return state_machine;
 }
 
 
-/**
- *
- */
-void exitState() {
-    getState()->isCurrent = FALSE;
 
-    getState()->stateHandler(exit_state);
-//    getState()->stateHandler(change_state);
-    getState()->onExit();
+dictionary *state_machine_ready(hash *state_machine) {
+    dictionary *state_machine_iterator = dictionary_new(state_machine);
+    return state_machine_iterator;
 }
 
 
-/**
- *
- */
-void stayState() {
-    getState()->stateHandler(stay_state);
+
+static void state_handler(void *state) {
+    State *next_state = ((State *) state)->next;
+    next_state->onEnter(next_state);
+    pusub_unsubscribe(STATE_TOPIC_LIST[EXIT_STATE], state_handler);
 }
 
 
-/**
- *
- * @param state
- */
-void changeState(int state) {
 
-    if (state < STATE_MAX) {
-        if (state != getState()->State) {
+static void subscribe_state() {
+    pubsub_subscribe(STATE_TOPIC_LIST[EXIT_STATE], state_handler);
+}
 
-            exitState();
-            setState((state_list) state);
-            enterState();
 
-        } else {
 
-            stayState();
+static State *get_current_state(hash *state_machine) {
 
+    dictionary *it = dictionary_new(state_machine);
+    hash_template *state;
+
+    while ((state = dictionary_next(it))) {
+        if (((State *) state->val)->isCurrent == TRUE) {
+            dictionary_destroy(it);
+            return ((State *) state->val);
         }
-    } else {
-        exitState();
-        printf("FINISH");
     }
 
+    dictionary_destroy(it);
+    return NULL;
 }
 
 
-/**
- *
- */
-void initializeState() {
-    enterState();
-}
 
 
-/**
- *
- * @param event
- * @return
- */
-char *getEventTypeString(event_types event) {
-    switch (event) {
-        case change_state:
-            return "change";
-        case stay_state:
-            return "stay";
-        case enter_state:
-            return "enter";
-        case exit_state:
-            return "exit";
-        case time_out:
-            return "time_out";
+void state_machine_goto(hash *state_machine, State *state) {
+
+    State *current_state;
+
+    switch(state->isCurrent) {
+
+        case FALSE:
+            current_state = get_current_state(state_machine);
+            if (current_state) {
+
+                // TODO:
+                state->prev = current_state;
+                current_state->next = state;
+
+                subscribe_state();
+                current_state->onExit(current_state);
+            } else {
+                state->onEnter(state);
+            }
+            break;
+
+        case TRUE:
+            state->onStay(state);
+            break;
+
         default:
-            return "";
+            state->onStay(state);
+            break;
     }
 }
 
 
-/**
- *
- */
-void stateHandler(event_types event) {
-
-    puts("\n>>>>>>>>>>>>>>>>>");
-    getState()->print_id();
-    printf(" :: %s", getEventTypeString(event));
-    puts("\n>>>>>>>>>>>>>>>>>\n");
-
-    printf("\n");
-}
-
-
-
-void onLoadingEnterHandler(void) {
-    loading_onEnter();
-    changeState(STATE_INTRO);
-}
-
-
-
-void onIntroEnterHandler(void) {
-    intro_onEnter();
-    changeState(STATE_MAIN);
-}
-
-
-void onMainEnterHandler(void) {
-    main_onEnter();
-    changeState(STATE_MAX);
-}
