@@ -11,12 +11,11 @@
 
 #include <stdio.h>
 
-#include "states/loading_state.h"
-#include "states/intro_state.h"
-#include "states/main_state.h"
+#include "State.h"
 
-#define TRUE     1
-#define FALSE     0
+#include "classes/StateMachine/states/loading_state.h"
+#include "classes/StateMachine/states/intro_state.h"
+#include "classes/StateMachine/states/main_state.h"
 
 /**
  *
