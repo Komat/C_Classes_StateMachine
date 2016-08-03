@@ -66,7 +66,7 @@ void state_enter_handler(State *state) {
  */
 void intro_enter_handler(State *state) {
     printf("[ONCE::%s::ENTER]\n", state->id);
-    state_machie_unsubscribe(ENTER_STATE, intro_enter_handler);
+    state_machine_unsubscribe(ENTER_STATE, intro_enter_handler);
 }
 
 
@@ -76,7 +76,7 @@ void intro_enter_handler(State *state) {
  */
 void intro_exit_handler(State *state) {
     printf("[ONCE::%s::EXIT]\n", state->id);
-    state_machie_unsubscribe(EXIT_STATE, intro_exit_handler);
+    state_machine_unsubscribe(EXIT_STATE, intro_exit_handler);
 }
 
 
@@ -103,9 +103,9 @@ State *intro_state_new(void) {
 void state_machine_example() {
     state_machine_init();
 
-    state_machie_subscribe(ENTER_STATE, state_enter_handler);
-    state_machie_subscribe(STAY_STATE, state_stay_handler);
-    state_machie_subscribe(EXIT_STATE, state_exit_handler);
+    state_machine_subscribe(ENTER_STATE, state_enter_handler);
+    state_machine_subscribe(STAY_STATE, state_stay_handler);
+    state_machine_subscribe(EXIT_STATE, state_exit_handler);
 
     hash *state_machine = state_machine_new();
 
@@ -117,19 +117,19 @@ void state_machine_example() {
 
     dictionary *state_machine_list = state_machine_ready(state_machine);
 
-    state_machie_subscribe(ENTER_STATE, intro_enter_handler);
+    state_machine_subscribe(ENTER_STATE, intro_enter_handler);
     state_machine_goto(state_machine, Intro);
     sleep(1500);
     state_machine_goto(state_machine, Main);
     sleep(1500);
     state_machine_goto(state_machine, Intro);
     sleep(1500);
-    state_machie_subscribe(EXIT_STATE, intro_exit_handler);
+    state_machine_subscribe(EXIT_STATE, intro_exit_handler);
     state_machine_exit(state_machine, Intro);
 
-    state_machie_unsubscribe(ENTER_STATE, state_enter_handler);
-    state_machie_unsubscribe(STAY_STATE, state_stay_handler);
-    state_machie_unsubscribe(EXIT_STATE, state_exit_handler);
+    state_machine_unsubscribe(ENTER_STATE, state_enter_handler);
+    state_machine_unsubscribe(STAY_STATE, state_stay_handler);
+    state_machine_unsubscribe(EXIT_STATE, state_exit_handler);
 
     state_machine_destroy(state_machine, state_machine_list);
 

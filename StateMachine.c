@@ -9,19 +9,21 @@
 #include "StateMachine.h"
 
 
-
+/**
+ *
+ */
 void state_machine_init(void) {
     pubsub_new();
 }
 
 
-void state_machie_subscribe(STATE_TYPE param, void (*fun)(State *)) {
+void state_machine_subscribe(STATE_TYPE param, void (*fun)(State *)) {
     pubsub_subscribe(STATE_TOPIC_LIST[param], (Subscriber) fun);
 }
 
 
 
-void state_machie_unsubscribe(STATE_TYPE param, void (*fun)(State *)) {
+void state_machine_unsubscribe(STATE_TYPE param, void (*fun)(State *)) {
     pubsub_unsubscribe(STATE_TOPIC_LIST[param], (Subscriber) fun);
 }
 
