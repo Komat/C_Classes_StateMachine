@@ -16,6 +16,7 @@
 #define TRUE 1
 #define FALSE 0
 
+char **STATE_TOPIC_LIST;
 
 /**
  * イベントインデックスリスト

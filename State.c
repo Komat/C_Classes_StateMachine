@@ -11,13 +11,15 @@
 /**
  *
  */
-char *STATE_TOPIC_LIST[] = {
+char *_STATE_TOPIC_LIST[] = {
         "stay_state",
         "change_state",
         "enter_state",
         "exit_state"
 };
 
+
+char **STATE_TOPIC_LIST = _STATE_TOPIC_LIST;
 
 /**
  *

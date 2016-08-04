@@ -29,12 +29,6 @@ int sleep(unsigned long x) {
 
 
 /**
- *
- */
-extern char *STATE_TOPIC_LIST[];
-
-
-/**
  * 購読開始
  */
 void state_exit_handler(State *state) {

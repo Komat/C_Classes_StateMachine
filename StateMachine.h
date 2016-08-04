@@ -15,11 +15,6 @@
 /**
  *
  */
-extern char *STATE_TOPIC_LIST[];
-
-/**
- *
- */
 void state_machine_init(void);
 
 /**
