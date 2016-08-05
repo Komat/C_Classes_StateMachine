@@ -12,10 +12,10 @@
  *
  */
 char *_STATE_TOPIC_LIST[] = {
-        "stay_state",
-        "change_state",
-        "enter_state",
-        "exit_state"
+    "stay_state",
+    "change_state",
+    "enter_state",
+    "exit_state"
 };
 
 
