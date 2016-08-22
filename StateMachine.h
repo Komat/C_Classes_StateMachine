@@ -1,7 +1,7 @@
 /**
  * @description
  * @fileName StateMachine.h
- * @author 小松
+ * @author komat
  * @date 8/3/16
  * @version 0.0.0
  */
@@ -50,7 +50,7 @@ void state_machine_destroy(hash *state_machine, dictionary *state_machine_list);
  * @param state
  * @return
  */
-hash_template *state_machine_add(hash *state_list, State *state);
+hash_item *state_machine_add(hash *state_list, State *state);
 
 /**
  *

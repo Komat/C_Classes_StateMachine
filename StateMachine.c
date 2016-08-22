@@ -1,7 +1,7 @@
 /**
  * @description
  * @fileName StateMachine.h
- * @author 小松
+ * @author komat
  * @date 8/3/16
  * @version 0.0.0
  */
@@ -37,7 +37,7 @@ hash *state_machine_new(void) {
 
 void state_machine_destroy(hash *state_machine, dictionary *state_machine_list) {
 
-    hash_template *state;
+    hash_item *state;
 
     while ((state = dictionary_next(state_machine_list))) {
         dictionary_remove(state_machine, ((State *) state)->id);
@@ -50,8 +50,8 @@ void state_machine_destroy(hash *state_machine, dictionary *state_machine_list) 
 }
 
 
-hash_template *state_machine_add(hash *state_list, State *state) {
-    hash_template *state_machine = dictionary_set(state_list, state->id, state);
+hash_item *state_machine_add(hash *state_list, State *state) {
+    hash_item *state_machine = dictionary_set(state_list, state->id, state);
     return state_machine;
 }
 
@@ -81,7 +81,7 @@ static void subscribe_state() {
 static State *get_current_state(hash *state_machine) {
 
     dictionary *it = dictionary_new(state_machine);
-    hash_template *state;
+    hash_item *state;
 
     while ((state = dictionary_next(it))) {
         if (((State *) state->val)->isCurrent == TRUE) {
